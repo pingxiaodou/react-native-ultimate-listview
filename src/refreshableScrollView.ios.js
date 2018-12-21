@@ -111,7 +111,7 @@ export default class RefreshableScrollView extends ScrollView {
     }
   }
 
-  onScrollEndDrag = (event) => {
+  onScrollEndDrag = async (event) => {
     // console.log('onScrollEndDrag()');
     this._dragFlag = false
     const { y } = event.nativeEvent.contentOffset
@@ -120,7 +120,7 @@ export default class RefreshableScrollView extends ScrollView {
     if (!this._isRefreshing) {
       if (this.state.refreshStatus === RefreshStatus.releaseToRefresh) {
         this._isRefreshing = true
-        this.setState({
+        await this.setState({
           refreshStatus: RefreshStatus.refreshing,
           refreshTitle: this.props.refreshableTitleRefreshing
         })
@@ -149,12 +149,12 @@ export default class RefreshableScrollView extends ScrollView {
     this._scrollview.scrollToEnd(option)
   }
 
-  onRefreshEnd = () => {
+  onRefreshEnd = async () => {
     // console.log('onRefreshEnd()');
     if (this.state.refreshStatus === RefreshStatus.refreshing) {
       this._isRefreshing = false
       const now = new Date().getTime()
-      this.setState({
+      await this.setState({
         refreshStatus: RefreshStatus.pullToRefresh,
         refreshTitle: this.props.refreshableTitlePull,
         date: dateFormat(now, this.props.dateFormat)
